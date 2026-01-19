@@ -1,0 +1,103 @@
+# Robot Arm Calibration Configuration
+# ====================================
+# Adjust these values based on your specific hardware setup
+
+# Robot identification
+robot:
+  name: "4DOF ESP32 Arm"
+  description: "4-DOF robot arm with MG90S servos controlled by ESP32-C3"
+  dof: 4
+
+# Servo configuration
+servos:
+  # Joint 0: Base rotation
+  base:
+    pin: 2
+    min_pulse_us: 500
+    max_pulse_us: 2400
+    min_angle_deg: 0
+    max_angle_deg: 180
+    home_angle_deg: 90
+    direction: 1  # 1 or -1 to reverse
+    offset_deg: 0  # Calibration offset
+
+  # Joint 1: Shoulder
+  shoulder:
+    pin: 3
+    min_pulse_us: 500
+    max_pulse_us: 2400
+    min_angle_deg: 30
+    max_angle_deg: 150
+    home_angle_deg: 90
+    direction: 1
+    offset_deg: 0
+
+  # Joint 2: Elbow
+  elbow:
+    pin: 4
+    min_pulse_us: 500
+    max_pulse_us: 2400
+    min_angle_deg: 30
+    max_angle_deg: 150
+    home_angle_deg: 90
+    direction: 1
+    offset_deg: 0
+
+  # Joint 3: Gripper
+  gripper:
+    pin: 5
+    min_pulse_us: 500
+    max_pulse_us: 2400
+    min_angle_deg: 10
+    max_angle_deg: 90
+    home_angle_deg: 45
+    direction: 1
+    offset_deg: 0
+    open_angle_deg: 10
+    closed_angle_deg: 90
+
+# Joystick configuration
+joysticks:
+  deadzone: 50  # ADC units (0-4095)
+  sensitivity: 0.5  # Degrees per joystick unit
+
+  # Axis mappings
+  axis_mapping:
+    - joint: 0  # Joystick 1 X -> Base
+      axis: "joy1_x"
+      inverted: false
+    - joint: 1  # Joystick 1 Y -> Shoulder
+      axis: "joy1_y"
+      inverted: true
+    - joint: 2  # Joystick 2 X -> Elbow
+      axis: "joy2_x"
+      inverted: false
+    - joint: 3  # Joystick 2 Y -> Gripper
+      axis: "joy2_y"
+      inverted: false
+
+# Control parameters
+control:
+  loop_frequency_hz: 50
+  telemetry_frequency_hz: 20
+  smoothing_factor: 0.3
+  max_velocity_deg_s: 90
+
+# Safety limits
+safety:
+  enable_limits: true
+  emergency_stop_pin: 7
+  workspace_limits:
+    x_min_mm: -200
+    x_max_mm: 200
+    y_min_mm: 0
+    y_max_mm: 300
+    z_min_mm: 0
+    z_max_mm: 250
+
+# Network configuration
+network:
+  wifi_ssid: "YOUR_WIFI_SSID"
+  wifi_password: "YOUR_WIFI_PASSWORD"
+  websocket_port: 81
+  mdns_name: "robot-arm"

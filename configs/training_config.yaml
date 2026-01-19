@@ -1,0 +1,68 @@
+# Training Configuration for ESP32 Robot LfD
+# ===========================================
+
+# Dataset settings
+dataset:
+  path: "datasets/pick_place"
+  use_images: true
+  image_size: [240, 320]
+  augmentation:
+    enabled: true
+    color_jitter: 0.1
+    random_crop: false
+
+# Model architecture
+model:
+  type: "bc"  # Options: bc, diffusion, act
+
+  # Behavioral Cloning
+  bc:
+    image_encoder: "cnn"  # Options: cnn, resnet18
+    hidden_dims: [256, 256]
+    dropout: 0.1
+
+  # Diffusion Policy
+  diffusion:
+    num_diffusion_steps: 100
+    prediction_horizon: 16
+    action_horizon: 8
+    observation_horizon: 2
+    unet_dims: [256, 512, 1024]
+
+  # ACT (Action Chunking Transformer)
+  act:
+    chunk_size: 10
+    hidden_dim: 512
+    num_layers: 4
+    num_heads: 8
+    kv_dim: 32
+
+# Training hyperparameters
+training:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 1.0e-4
+  weight_decay: 1.0e-5
+  lr_scheduler: "cosine"
+  warmup_epochs: 5
+  gradient_clip: 1.0
+
+  # Early stopping
+  early_stopping:
+    enabled: true
+    patience: 20
+    min_delta: 0.001
+
+# Logging
+logging:
+  log_interval: 10
+  save_interval: 10
+  wandb:
+    enabled: false
+    project: "esp32-robot-lfd"
+
+# Hardware
+hardware:
+  device: "auto"  # auto, cpu, cuda, mps
+  num_workers: 4
+  pin_memory: true
